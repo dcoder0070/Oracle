@@ -1,0 +1,58 @@
+**************************************LAB ASSIGNMENT-2***********************
+
+
+Query 1- select student_name,to_char(student_dob,'MONTH,DD YYYY') as student_dob,lower(to_char(student_dob,'DAY')) from student_masters
+  2  where lower(to_char(student_dob,'FMDAY')) IN ('saturday','sunday');
+
+Query 2- select staff_name, floor(months_between(to_date(sysdate),hiredate)) as months_worked 
+	from staff_masters order by months_worked asc;
+Query 3- select * from staff_masters s,designation_masters d where (s.design_code=d.design_code) and 
+	(S.staff_name like 'a%s’);
+Query 4- select s.staff_name, d.design_code from designation_masters d,staff_masters s where (s.staff_name=d.design_code) and 
+	(s.staff_name like '_n%' or s.staff_name like '__n%') and (s.staff_name like '%[ns]');
+Query 5- select staff_name, lpad(staff_sal,15,'$') as salary from staff_masters;
+
+Query 6- select staff_name from staff_masters where staff_name like '%[_]%';
+
+Query 7- select * from staff_masters s,designation_masters d where s.design_code=d.design_code and  to_char(hiredate,'MON')='DEC';
+
+Query 8-
+	SELECT STAFF_NAME,STAFF_SAL,
+    	CASE
+    	WHEN STAFF_SAL >=50000 THEN 'A'
+    	WHEN STAFF_SAL  >25000 AND  STAFF_SAL<50000 THEN 'B'
+    	WHEN STAFF_SAL  >10000 AND  STAFF_SAL<25000 THEN 'C'
+    	ELSE 'D'
+    	END CASE
+    	FROM STAFF_MASTERS;
+Query 9- select staff_name,hiredate, to_char(hiredate,'DAY') as DAY from staff_masters order by to_char(hiredate-1,'d') ASC;
+
+Query 10- select staff_name,lpad('*',length(staff_name),'*') as astrick from staff_masters;
+
+Query 11- select staff_name,rpad(' ',length(staff_name)-1,'*') from staff_masters;
+
+Query 12-select hiredate from staff_masters where to_char(hiredate,'dd')<15;
+
+Query 13- select staff_name,hiredate, to_char(hiredate,'DAY') as WeekDay from staff_masters order by (next_day(hiredate,'MONDAY')-hiredate) desc;
+
+Query 14- SELECT INSTR('Mississippi', 'i', 1, 3) FROM dual;
+
+Query 15- select to_char(NEXT_DAY(LAST_DAY(hiredate)-INTERVAL '7' DAY,'FRIDAY'),'fmddspth "of" MONTH YYYY') as PAYDAY from staff_masters;
+
+Query 16- select max(staff_sal) as maximum,min(staff_sal)as minimum,sum(staff_sal) as total,avg(staff_sal) as average from staff_masters;
+
+Query 17- select max(s.staff_sal) maximuim,
+	min(s.staff_sal) as minimum, 
+	sum(s.staff_sal) as total, 
+	avg(s.staff_sal) as average , 
+	d.design_name from staff_masters s ,designation_masters d 
+	where (s.design_code=d.design_code) group by d.design_name order by total asc;
+
+Query 18-select d.dept_code,d.dept_name,count(*) from department_masters d,staff_masters s,student_masters st
+	 where d.dept_code = s.dept_code and d.dept_code = st.dept_code group by d.dept_code,d.dept_name; 
+
+Query 19- select count(*) Total_number_of_Managers from staff_masters where staff_code IN (select mgr_code from staff_masters);
+
+Query 20-select s1.staff_code,s1.mgr_code,s1.staff_name,MIN(s2.staff_sal) as Min_salary from staff_masters s1
+	join staff_masters s2 ON s1.staff_code = s2.mgr_code group by s1.mgr_code,s1.staff_code,s1.staff_name having MIN(s2.staff_sal)>10000 order by MIN(s2.staff_sal) desc;
+
