@@ -1,0 +1,87 @@
+1. QUERY: SELECT s.staff_name,d.dept_code,d.dept_name,s.staff_sal 
+		FROM staff_masters s,department_masters d 
+		WHERE s.dept_code=d.dept_code 
+		AND s.staff_sal>20000;
+
+2. QUERY:  SELECT s.staff_name,d.dept_code,d.dept_name 
+		FROM staff_masters s,department_masters d 
+		WHERE d.dept_code!=10 
+		AND s.staff_name LIKE '%A%';
+3. QUERY: SELECT s1.staff_code,s1.staff_name,d.dept_name ,s2.mgr_code ,s2.staff_name 
+		FROM staff_masters s1,staff_masters s2, department_masters d 
+		WHERE s1.staff_code=s2.mgr_code;
+
+4. QUERY: SELECT s.student_code,s.student_name,d.dept_name, sm.subject1,sm.subject2,sm.subject3 
+		FROM student_masters s,department_masters d,student_marks sm 
+		WHERE s.student_code=sm.student_code 
+		AND s.dept_code IN(10,20) 
+		AND sm.subject1>60 
+		AND sm.subject2>60 
+		AND sm.subject3>60;
+
+5. QUERY: SELECT s.student_code,s.student_name,bt.book_code,b.book_name 
+		FROM student_master s, book_masters b,book_transactions bt 
+		WHERE s.student_code=bt.student_code 
+		AND book_expected_return_date=sysdate;
+
+6. QUERY: SELECT s.student_code,s.student_name,bt.book_code,b.book_name 
+		FROM student_master s, book_masters b,book_transactions bt 
+			WHERE s.student_code=bt.student_code 
+			AND book_expected_return_date=sysdate;
+
+
+7. QUERY: SELECT s.staff_code,s.staff_name,d.design_name,dp.dept_name
+		 FROM staff_masters s,designation_masters d,department_masters dp 
+			WHERE s.design_code=d.design_code 
+			AND s.dept_code=dp.dept_code 
+			AND d.design_name!='HOD';
+
+8.  QUERY: SELECT student_masters.student_code,student_masters.student_name,department_masters.dept_code,department_masters.dept_name, student_marks.subject1+student_marks.subject2+student_marks.subject3 as total_marks 
+	    FROM student_masters,department_masters,student_marks
+		WHERE  student_masters.student_code=student_marks.student_code 
+		AND department_masters.dept_code=student_masters.dept_code 
+		ORDER BY department_masters.dept_name,student_marks.subject1+student_marks.subject2+student_marks.subject3;
+
+9.  QUERY:  SELECT  s.staff_code,s.staff_name,d.design_name,bt.book_code,b.book_name,((sysdate-Book_expected_return_date )*5) as Fine 
+		FROM staff_masters s,designation_masters d,book_transactions bt,book_masters b 
+		WHERE s.staff_code=bt.staff_code AND b.book_code=bt.book_code AND s.design_code=d.design_code ; 
+
+10. QUERY: SELECT staff_code,staff_name,staff_sal 
+		FROM staff_masters  where staff_sal<=(select avg(staff_sal) FROM staff_masters);
+
+11. QUERY: SELECT staff_masters.staff_code,staff_masters.staff_name,staff_masters.design_code,designation_masters.design_name 
+		FROM staff_masters,designation_masters 
+		WHERE staff_masters.design_code=designation_masters.design_code;
+
+12. QUERY:  SELECT book_code,book_name,book_pub_year,book_pub_author FROM book_masters WHERE book_pub_author IN(select book_pub_author from book_masters group by book_pub_author having count(DISTINCT book_name)>1);
+
+13. QUERY: SELECT s1.staff_name,count(b.staff_code) 
+		FROM staff_masters s1,book_transactions b WHERE s1.staff_code=b.staff_code group by s1.staff_name ;
+
+14. QUERY: SELECT student_masters.student_code,student_masters.student_name, student_marks.subject1,student_marks.subject2,student_marks.subject3, student_marks.subject1+student_marks.subject2+student_marks.subject3 as total_marks 
+		FROM student_masters,student_marks where student_masters.student_code=student_marks.student_code and rownum<=10 
+		ORDER BY student_marks.subject1+student_marks.subject2+student_marks.subject3 desc;
+
+15. QUERY: SELECT staff_code,staff_name,staff_sal 
+		FROM staff_masters 
+		WHERE staff_sal<=(select avg(staff_sal) from staff_masters);
+
+16. QUERY: SELECT staff_masters.staff_name, department_masters.dept_name 
+		FROM staff_masters join department_masters on department_masters.dept_code=staff_masters.dept_code 
+		WHERE department_masters.dept_code<>staff_masters.dept_code;
+
+17. QUERY: SELECT student_masters.student_code,student_masters.student_name, student_marks.subject1,student_marks.subject2,student_marks.subject3 
+		FROM student_masters join student_marks on student_masters.student_code=student_marks.student_code 
+		WHERE rownum<=1
+		ORDER BY student_marks.subject1,student_marks.subject2,student_marks.subject3 desc;
+
+18. QUERY: SELECT s.student_code , s.student_name, dp.dept_name from student_masters s 
+		JOIN department_masters dp ON s.dept_cod=dp.dept_code 
+		where s.dept_code=(select dept_code from student_masters 
+		WHERE rownum=1 GROUP BY dept_code);
+
+19. QUERY:  SELECT s1.staff_code,s1.staff_name,dept.dept_name,d.design_name 
+		FROM staff_masters s1,designation_masters d,department_masters dept 
+		WHERE s1.design_code=d.design_code AND (sysdate-hiredate)<30;
+
+20. QUERY: select s1.staff_name,count(*) from staff_masters s1,staff_masters s2 WHERE s1.staff_code=s2.mgr_code group by s1.staff_name ;
